@@ -1,6 +1,6 @@
 {
   "name": "paperfill",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "在 Word / Excel 原文排版上填写合同。Headless contract template runtime for docx/xlsx.",
   "keywords": [
     "contract",
@@ -74,13 +74,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@paperfill/docx": "0.1.4",
-    "@paperfill/kernel": "0.1.3",
-    "@paperfill/pdf": "0.1.2",
-    "@paperfill/react": "0.1.0",
-    "@paperfill/ui": "0.1.0",
-    "@paperfill/vue": "0.1.0",
-    "@paperfill/xlsx": "0.1.3"
+    "@paperfill/docx": "0.2.0",
+    "@paperfill/kernel": "0.2.0",
+    "@paperfill/pdf": "0.2.0",
+    "@paperfill/react": "0.2.0",
+    "@paperfill/ui": "0.2.0",
+    "@paperfill/vue": "0.2.0",
+    "@paperfill/xlsx": "0.2.0"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

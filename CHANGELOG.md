@@ -2,25 +2,18 @@
 
 本仓库按 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 记录公开 API 变化。版本遵循 semver；`0.x` 仍可能有破坏性调整。
 
-## 0.1.7 — 2026-08-18
+## 0.2.0 — 2026-08-18
 
-伞包 `paperfill@0.1.7`，`@paperfill/kernel@0.1.3`，`@paperfill/docx@0.1.4`，`@paperfill/xlsx@0.1.3`，`@paperfill/pdf@0.1.2`。
+全部包对齐 `0.2.0`：`paperfill`、`@paperfill/kernel`、`docx`、`xlsx`、`pdf`、`ui`、`vue`、`react`。
 
 ### Added
 
+- `createKernel({ markers: { start, end } })`：自定义标记起止符，默认仍是 `{{` / `}}`。`load` 写入 `definition.markers`（默认省略）；`hydrate` 以 definition 为准。`DocxAdapter` / `XlsxAdapter` / `mountDocxPreview` 接受同一份 `markers`；`kernel.getMarkers()` 给预览用。
 - 可选 `plugins` 钩子，**不替代** `validators` / `formatters` / `subscribe` / `mountField`。同一对象可当 `PaperfillPlugin` 四处传入，未实现的方法跳过。
   - kernel：`afterDiscover` → `afterHydrate` → `validators`；`formatters` → `beforeExport` → `bind` → `afterExport` → `exported`
   - `mountDocxPreview`：`afterHtml` / `afterExpand` / `afterSlots`（内置铺满仍先跑；可选 `docxFitHostPlugin`）
   - `mountXlsxPreview`：`afterSheets` / `afterTable`
   - `exportFilledDocument`：`afterPdfHtml`
-
-## 0.1.6 — 2026-08-18
-
-伞包 `paperfill@0.1.6`，`@paperfill/kernel@0.1.2`，`@paperfill/docx@0.1.3`，`@paperfill/xlsx@0.1.2`。
-
-### Added
-
-- `createKernel({ markers: { start, end } })`：自定义标记起止符，默认仍是 `{{` / `}}`。`load` 写入 `definition.markers`（默认省略）；`hydrate` 以 definition 为准。`DocxAdapter` / `XlsxAdapter` / `mountDocxPreview` 接受同一份 `markers`；`kernel.getMarkers()` 给预览用。
 
 ## 0.1.5 — 2026-08-17
 

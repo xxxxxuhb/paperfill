@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Vue 3 helpers for paperfill",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,7 +26,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.1.0"
+    "@paperfill/kernel": "0.2.0"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

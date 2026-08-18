@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React helpers for paperfill",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,7 +26,7 @@
     "react": ">=18"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.1.0"
+    "@paperfill/kernel": "0.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

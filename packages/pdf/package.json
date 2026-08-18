@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/pdf",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Export filled docx/xlsx to PDF (html2canvas | canvas-draw-element | print)",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
