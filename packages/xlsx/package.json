@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/xlsx",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Excel (.xlsx) adapter and preview layout for paperfill",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.3.0",
+    "@paperfill/kernel": "0.3.1",
     "exceljs": "^4.4.0"
   },
   "devDependencies": {

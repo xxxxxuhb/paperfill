@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/kernel",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Headless contract template kernel",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/html",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "HTML adapter and preview layout for paperfill",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.3.0"
+    "@paperfill/kernel": "0.3.1"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

@@ -2,7 +2,9 @@
 
 本仓库按 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 记录公开 API 变化。版本遵循 semver；`0.x` 仍可能有破坏性调整。
 
-## 0.3.0 — 2026-10-30
+## 0.3.1 — 2026-10-30
+
+全部包对齐 `0.3.1`。`@paperfill/kernel`、`docx`、`xlsx` 的 `0.3.0` 是中断发布留下的版本，完整发布以 `0.3.1` 为准。
 
 ### Added
 
