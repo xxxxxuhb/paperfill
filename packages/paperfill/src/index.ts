@@ -1,6 +1,7 @@
 export * from '@paperfill/kernel'
 export * from '@paperfill/docx'
 export * from '@paperfill/xlsx'
+export * from '@paperfill/html'
 export * from '@paperfill/ui'
 export * from '@paperfill/pdf'
 export type { PaperfillPlugin } from './plugin'

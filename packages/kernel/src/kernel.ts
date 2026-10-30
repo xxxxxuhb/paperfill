@@ -1,5 +1,5 @@
 import { formatData } from './format'
-import { hashBytes } from './hash'
+import { hashBytes, hashText, hashValue } from './hash'
 import { createId } from './id'
 import { isDefaultMarkers, normalizeMarkers, DEFAULT_MARKERS } from './markers'
 import { cloneData, insertTableRow, removeTableRow, setDataPath } from './path'
@@ -22,6 +22,7 @@ import type {
   KernelState,
   MarkerDelimiters,
   PreviewModel,
+  Source,
   TemplateDefinition,
   ViewportPort,
 } from './types'
@@ -79,6 +80,19 @@ export function createKernel(options: CreateKernelOptions): Kernel {
     adapter.setMarkers?.(markers)
   }
 
+  async function sourceHash(source: Source): Promise<string> {
+    if (source.hash) return source.hash
+    switch (source.kind) {
+      case 'docx':
+      case 'xlsx':
+        return hashBytes(source.buffer)
+      case 'html':
+        return source.html !== undefined ? hashText(source.html) : hashBytes(source.buffer)
+      case 'custom':
+        return hashValue(source.data)
+    }
+  }
+
   function persistMarkers(): MarkerDelimiters | undefined {
     return isDefaultMarkers(markers) ? undefined : markers
   }
@@ -125,7 +139,7 @@ export function createKernel(options: CreateKernelOptions): Kernel {
       case 'load': {
         applyMarkers(defaultMarkers)
         await adapter.load(command.source)
-        const hash = command.source.hash ?? (await hashBytes(command.source.buffer))
+        const hash = await sourceHash(command.source)
         preview = adapter.getPreview()
         const fields: Field[] = []
         const names = new Set<string>()

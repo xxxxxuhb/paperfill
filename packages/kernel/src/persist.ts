@@ -2,7 +2,17 @@ import type { FormSchema, Kernel, PreviewModel, Source, TemplateDefinition, Vali
 
 /** Persist the three artifacts the page owns. */
 export type PersistBundle = {
+  /** Complete source, including HTML strings and custom adapter data. */
+  source: Source
+  /** Backward-compatible binary alias for docx/xlsx bundles. */
+  file?: Uint8Array
+  definition: TemplateDefinition
+  data: Record<string, unknown>
+}
+
+type LegacyPersistBundle = {
   file: Uint8Array
+  source?: never
   definition: TemplateDefinition
   data: Record<string, unknown>
 }
@@ -31,17 +41,25 @@ export function toPersistBundle(kernel: Kernel): PersistBundle | null {
   const source = kernel.getSource()
   const definition = kernel.getDefinition()
   if (!source || !definition) return null
-  return {
-    file: source.buffer,
+  const bundle: PersistBundle = {
+    source,
     definition,
     data: kernel.getData(),
   }
+  if ('buffer' in source && source.buffer instanceof Uint8Array) bundle.file = source.buffer
+  return bundle
 }
 
-export function hydrateFromBundle(bundle: PersistBundle) {
+export function hydrateFromBundle(bundle: PersistBundle | LegacyPersistBundle) {
+  const source =
+    bundle.source ??
+    ({
+      kind: bundle.definition.source.kind,
+      buffer: bundle.file,
+    } as Source)
   return {
     type: 'hydrate' as const,
-    source: { kind: bundle.definition.source.kind, buffer: bundle.file },
+    source,
     definition: bundle.definition,
     data: bundle.data,
   }

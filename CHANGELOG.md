@@ -2,6 +2,15 @@
 
 本仓库按 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 记录公开 API 变化。版本遵循 semver；`0.x` 仍可能有破坏性调整。
 
+## Unreleased
+
+### Added
+
+- `kind` 增加 `html` 和 `custom`。`HtmlAdapter` 接受 HTML 字符串或 UTF-8
+  `Uint8Array`，并提供 `mountHtmlPreview`；`custom` 由接入方实现 `DocumentAdapter`。
+- 持久化 bundle 保存完整 `source`，因此可恢复 HTML 字符串和自定义 adapter 数据；
+  docx/xlsx 仍保留 `file` 二进制别名。
+
 ## 0.2.0 — 2026-08-18
 
 全部包对齐 `0.2.0`：`paperfill`、`@paperfill/kernel`、`docx`、`xlsx`、`pdf`、`ui`、`vue`、`react`。

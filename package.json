@@ -6,9 +6,9 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build -w @paperfill/kernel && npm run build -w @paperfill/docx && npm run build -w @paperfill/xlsx && npm run build -w @paperfill/ui && npm run build -w @paperfill/pdf && npm run build -w @paperfill/vue && npm run build -w @paperfill/react && npm run build -w paperfill",
-    "typecheck": "npm run build -w @paperfill/kernel && npm run typecheck -w @paperfill/kernel && npm run typecheck -w @paperfill/docx && npm run typecheck -w @paperfill/xlsx && npm run typecheck -w @paperfill/ui && npm run typecheck -w @paperfill/pdf && npm run typecheck -w @paperfill/vue && npm run typecheck -w @paperfill/react && npm run typecheck -w paperfill",
-    "test": "npm run build && tsx --test packages/kernel/test/*.test.ts packages/docx/test/*.test.ts packages/xlsx/test/*.test.ts packages/ui/test/*.test.ts",
+    "build": "npm run build -w @paperfill/kernel && npm run build -w @paperfill/docx && npm run build -w @paperfill/xlsx && npm run build -w @paperfill/html && npm run build -w @paperfill/ui && npm run build -w @paperfill/pdf && npm run build -w @paperfill/vue && npm run build -w @paperfill/react && npm run build -w paperfill",
+    "typecheck": "npm run build -w @paperfill/kernel && npm run typecheck -w @paperfill/kernel && npm run typecheck -w @paperfill/docx && npm run typecheck -w @paperfill/xlsx && npm run typecheck -w @paperfill/html && npm run typecheck -w @paperfill/ui && npm run typecheck -w @paperfill/pdf && npm run typecheck -w @paperfill/vue && npm run typecheck -w @paperfill/react && npm run typecheck -w paperfill",
+    "test": "npm run build && tsx --test packages/kernel/test/*.test.ts packages/docx/test/*.test.ts packages/xlsx/test/*.test.ts packages/html/test/*.test.ts packages/ui/test/*.test.ts",
     "templates": "tsx examples/templates/build.ts",
     "example": "npm run example:nuxt",
     "example:nuxt": "npm run dev -w @paperfill/example-nuxt",

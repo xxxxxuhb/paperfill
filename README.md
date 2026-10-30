@@ -132,12 +132,28 @@ import {
   mountDocxPreview,
   XlsxAdapter,
   mountXlsxPreview,
+  HtmlAdapter,
+  mountHtmlPreview,
   nativeFieldMounter,
   exportFilledDocument,
 } from 'paperfill'
 import 'paperfill/ui/style.css'
 import 'paperfill/xlsx/style.css'
 ```
+
+HTML 模板可直接传字符串，也可传 UTF-8 文件字节：
+
+```ts
+const kernel = createKernel({ adapter: new HtmlAdapter() })
+await kernel.dispatch({
+  type: 'load',
+  source: { kind: 'html', html: '<p>甲方：{{partyA}}</p>' },
+  // 文件：source: { kind: 'html', buffer: new Uint8Array(await file.arrayBuffer()) }
+})
+```
+
+`kind: 'custom'` 不带内置实现：业务实现 `DocumentAdapter`，通过
+`source: { kind: 'custom', data, hash? }` 接收任意模板数据。不能稳定 JSON 序列化时必须提供 `hash`。
 
 样式仍走子路径。Vue / React 订阅因框架 peer 不同，用 `paperfill/vue` 或 `paperfill/react`。
 
@@ -149,7 +165,7 @@ import 'paperfill/xlsx/style.css'
 |----|-------------|
 | **Node** | `>= 20`（构建、示例、脚本） |
 | **浏览器** | 现代 evergreen：Chrome / Edge **≥ 94**，Firefox **≥ 93**，Safari **≥ 15.4**（编译目标 ES2022；需 `Uint8Array`、基础 DOM） |
-| **运行时** | `kernel` / `docx` / `xlsx` 可在 Node 与浏览器使用；`ui`、`mountDocxPreview`、`mountXlsxPreview`、`pdf` 依赖 **浏览器 DOM**，勿在纯 SSR 路径直接调用 |
+| **运行时** | `kernel` / `docx` / `xlsx` / `html` adapter 可在 Node 与浏览器使用；`ui`、各 `mount*Preview`、`pdf` 依赖 **浏览器 DOM**，勿在纯 SSR 路径直接调用 |
 | **PDF** | `exportFilledDocument` **仅浏览器**；默认 `html2canvas`，不是服务端 Office 矢量转 PDF；`canvas-draw-element` 需 Chromium 实验 flag |
 | **Word 预览** | `mountDocxPreview` 版式靠 `docx-preview`，与桌面 Word 不完全一致；自定义标记起止符时传 `markers: kernel.getMarkers()` |
 | **Excel 预览** | `getPreview` / `mountXlsxPreview` 支持单元格填充色、字体色（`argb`；主题色为近似）；默认去掉末尾幽灵行/列；不覆盖渐变、条件格式、图表等 |

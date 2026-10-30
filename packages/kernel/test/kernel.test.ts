@@ -303,6 +303,35 @@ test('subscribe can unsubscribe', async () => {
   assert.equal(events.length, count)
 })
 
+test('custom kind delegates source data and export to a custom adapter', async () => {
+  class CustomAdapter implements DocumentAdapter {
+    readonly kind = 'custom' as const
+    async load(_source: Source) {}
+    async discoverFields() {
+      return []
+    }
+    getPreview() {
+      return { kind: 'custom' as const, renderer: 'business-form' }
+    }
+    async insertAnchor(_field: Field) {}
+    async removeAnchor(_fieldId: string) {}
+    async bind(_data: Record<string, unknown>) {}
+    async export() {
+      return new Uint8Array([1])
+    }
+  }
+  const adapter = new CustomAdapter()
+  const kernel = createKernel({ adapter })
+  await kernel.dispatch({
+    type: 'load',
+    source: { kind: 'custom', data: { templateId: 'contract-v1' } },
+  })
+  const result = await kernel.dispatch({ type: 'export' })
+  assert.equal(result.type, 'exported')
+  if (result.type === 'exported') assert.equal(result.format, 'custom')
+  assert.equal(kernel.getDefinition()?.source.kind, 'custom')
+})
+
 test('setValue supports nested table cell paths', async () => {
   const adapter = new MemoryAdapter()
   adapter.discovered = [

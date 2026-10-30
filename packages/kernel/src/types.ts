@@ -10,6 +10,9 @@ export type FieldType =
   /** 纯展示：data 仍动态写入/导出，预览不渲染输入框 */
   | 'display'
 
+export type DocumentKind = 'docx' | 'xlsx' | 'html' | 'custom'
+export type ExportFormat = DocumentKind
+
 export type DocxAnchor =
   | { kind: 'bookmark'; name: string }
   | { kind: 'sdt'; tag: string }
@@ -80,17 +83,33 @@ export interface MarkerDelimiters {
 
 export interface TemplateDefinition {
   version: 1
-  source: { kind: 'docx' | 'xlsx'; hash: string }
+  source: { kind: DocumentKind; hash: string }
   fields: Field[]
   /** Omit = `{{` / `}}`. Persist with the template so hydrate matches. */
   markers?: MarkerDelimiters
 }
 
-export interface Source {
+export interface BinarySource {
   kind: 'docx' | 'xlsx'
   buffer: Uint8Array
   hash?: string
 }
+
+export type HtmlSource =
+  | { kind: 'html'; html: string; buffer?: never; hash?: string }
+  | { kind: 'html'; buffer: Uint8Array; html?: never; hash?: string }
+
+/**
+ * Input owned by a custom adapter. Supply `hash` when `data` cannot be
+ * deterministically JSON-serialized.
+ */
+export interface CustomSource {
+  kind: 'custom'
+  data: unknown
+  hash?: string
+}
+
+export type Source = BinarySource | HtmlSource | CustomSource
 
 export interface ValidationIssue {
   path: string
@@ -192,12 +211,23 @@ export interface XlsxPreview {
   sheets: XlsxPreviewSheet[]
 }
 
-export type PreviewModel = DocxPreview | XlsxPreview
+export interface HtmlPreview {
+  kind: 'html'
+  html: string
+}
+
+/** A custom adapter may attach any serializable preview payload. */
+export interface CustomPreview {
+  kind: 'custom'
+  [key: string]: unknown
+}
+
+export type PreviewModel = DocxPreview | XlsxPreview | HtmlPreview | CustomPreview
 
 export type DiscoveredField = Omit<Field, 'id'> & { id?: string }
 
 export interface DocumentAdapter {
-  kind: 'docx' | 'xlsx'
+  kind: DocumentKind
   /** Optional; kernel pushes delimiters on load / hydrate. */
   setMarkers?(markers: MarkerDelimiters): void
   load(source: Source): Promise<void>
@@ -217,7 +247,7 @@ export type KernelEvent =
   | { type: 'field-removed'; fieldId: string }
   | { type: 'data-changed' }
   | { type: 'validated'; result: ValidationResult }
-  | { type: 'exported'; format: 'docx' | 'xlsx'; bytes: number }
+  | { type: 'exported'; format: ExportFormat; bytes: number }
 
 export type Command =
   | { type: 'load'; source: Source }
@@ -235,11 +265,11 @@ export type Command =
   | { type: 'resetData' }
   | { type: 'insertRow'; table: string; index?: number; row?: Record<string, unknown> }
   | { type: 'removeRow'; table: string; index: number }
-  | { type: 'export'; format?: 'docx' | 'xlsx' }
+  | { type: 'export'; format?: ExportFormat }
 
 export type DispatchResult =
   | { type: 'ok' }
-  | { type: 'exported'; buffer: Uint8Array; format: 'docx' | 'xlsx' }
+  | { type: 'exported'; buffer: Uint8Array; format: ExportFormat }
 
 export interface Kernel {
   getState(): KernelState
@@ -308,7 +338,7 @@ export interface KernelPlugin {
   ): Record<string, unknown> | void
   /** After `adapter.export()`, before `exported` event. */
   afterExport?(
-    result: { buffer: Uint8Array; format: 'docx' | 'xlsx' },
+    result: { buffer: Uint8Array; format: ExportFormat },
     ctx: { definition: TemplateDefinition; source: Source },
   ): Uint8Array | { buffer: Uint8Array } | void
 }

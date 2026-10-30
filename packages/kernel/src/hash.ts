@@ -13,3 +13,22 @@ export async function hashBytes(buffer: Uint8Array): Promise<string> {
   }
   return (h >>> 0).toString(16).padStart(8, '0')
 }
+
+export async function hashText(text: string): Promise<string> {
+  return hashBytes(new TextEncoder().encode(text))
+}
+
+export async function hashValue(value: unknown): Promise<string> {
+  if (value instanceof Uint8Array) return hashBytes(value)
+  if (typeof value === 'string') return hashText(value)
+  let json: string | undefined
+  try {
+    json = JSON.stringify(value)
+  } catch {
+    throw new Error('custom source requires hash when data is not JSON-serializable')
+  }
+  if (json === undefined) {
+    throw new Error('custom source requires hash when data is not JSON-serializable')
+  }
+  return hashText(json)
+}

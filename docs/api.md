@@ -10,7 +10,7 @@ npm i paperfill
 
 | 导入路径 | 内容 |
 |----------|------|
-| `paperfill` | **全部 API**：`createKernel`、`DocxAdapter` / `mountDocxPreview`、`XlsxAdapter` / `mountXlsxPreview`、`nativeFieldMounter`、`exportFilledDocument`、类型与 persist |
+| `paperfill` | **全部 API**：`createKernel`、Docx / Xlsx / Html adapter 与 preview、`nativeFieldMounter`、`exportFilledDocument`、类型与 persist |
 | `paperfill/ui/style.css` | 原生字段样式 |
 | `paperfill/xlsx/style.css` | Excel 预览表格骨架样式 |
 | `paperfill/vue` | `useContractKit`（需 Vue 3 peer） |
@@ -115,7 +115,7 @@ await kernel.dispatch({ type: 'removeRow', table: 'items', index: 0 })
 ```ts
 interface TemplateDefinition {
   version: 1
-  source: { kind: 'docx' | 'xlsx'; hash: string }
+  source: { kind: 'docx' | 'xlsx' | 'html' | 'custom'; hash: string }
   fields: Field[]
   markers?: { start: string; end: string } // 省略 = {{ }}
 }
@@ -165,12 +165,15 @@ interface FieldColumn {
 ### `Source`
 
 ```ts
-interface Source {
-  kind: 'docx' | 'xlsx'
-  buffer: Uint8Array
-  hash?: string
-}
+type Source =
+  | { kind: 'docx' | 'xlsx'; buffer: Uint8Array; hash?: string }
+  | { kind: 'html'; html: string; hash?: string }
+  | { kind: 'html'; buffer: Uint8Array; hash?: string }
+  | { kind: 'custom'; data: unknown; hash?: string }
 ```
+
+HTML `buffer` 按 UTF-8 解码。`custom.data` 由自定义 adapter 解释；若它不能稳定
+`JSON.stringify`，调用方必须传 `hash`。
 
 ### `ValidationResult`
 
@@ -254,7 +257,11 @@ const kernel = createKernel({
 ```ts
 type DispatchResult =
   | { type: 'ok' }
-  | { type: 'exported'; buffer: Uint8Array; format: 'docx' | 'xlsx' }
+  | {
+      type: 'exported'
+      buffer: Uint8Array
+      format: 'docx' | 'xlsx' | 'html' | 'custom'
+    }
 ```
 
 ### `dispatch` 命令
@@ -339,7 +346,7 @@ const kernel = createKernel({
 
 ```ts
 interface DocumentAdapter {
-  kind: 'docx' | 'xlsx'
+  kind: 'docx' | 'xlsx' | 'html' | 'custom'
   load(source: Source): Promise<void>
   discoverFields(): Promise<DiscoveredField[]>
   getPreview(): PreviewModel
@@ -357,6 +364,11 @@ interface DocumentAdapter {
 | `mountDocxPreview` | `paperfill` | 把 `.docx` 渲进传入的 `container` 并铺满宽度；默认 `inWrapper: false`、`ignoreWidth: true`；自定义起止符传 `markers`；`plugins`：`afterHtml` / `afterExpand` / `afterSlots` |
 | `XlsxAdapter` | `paperfill` | ExcelJS；单元格文本中的标记；`getPreview` 含 `style`（背景/字体色等）。`new XlsxAdapter({ markers })` |
 | `mountXlsxPreview` | `paperfill` | 把 `getPreview()` 的 sheets 渲成表格 DOM，业务只注入 `mountField`；`plugins`：`afterSheets` / `afterTable` |
+| `HtmlAdapter` | `paperfill` | 接受 HTML 字符串或 UTF-8 字节；扫描、bind 并导出 HTML |
+| `mountHtmlPreview` | `paperfill` | 渲染 HTML 并在 marker 位置挂字段；默认移除脚本、事件属性及危险 URL |
+
+`custom` 不提供内置 adapter。业务实现 `DocumentAdapter`，`load` 中读取
+`CustomSource.data`，并返回 `{ kind: 'custom', ... }` 预览模型。
 
 ```ts
 import { mountDocxPreview } from 'paperfill'
@@ -495,7 +507,8 @@ interface ExportPdfOptions {
 
 | 产物 | 来源 |
 |------|------|
-| `file` | `kernel.getSource().buffer`（原始模板，未被 export 改写） |
+| `source` | 完整原始输入；docx/xlsx 为 buffer，HTML 可为字符串或 buffer，custom 为业务 data |
+| `file` | 仅 docx/xlsx/HTML buffer 的兼容二进制别名 |
 | `definition` | `kernel.getDefinition()` |
 | `data` | `kernel.getData()` |
 

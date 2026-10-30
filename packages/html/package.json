@@ -1,0 +1,29 @@
+{
+  "name": "@paperfill/html",
+  "version": "0.2.0",
+  "description": "HTML adapter and preview layout for paperfill",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@paperfill/kernel": "0.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

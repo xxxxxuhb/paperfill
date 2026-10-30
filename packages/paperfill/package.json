@@ -43,6 +43,11 @@
       "default": "./dist/xlsx.js"
     },
     "./xlsx/style.css": "./dist/xlsx-style.css",
+    "./html": {
+      "types": "./dist/html.d.ts",
+      "require": "./dist/html.js",
+      "default": "./dist/html.js"
+    },
     "./ui": {
       "types": "./dist/ui.d.ts",
       "require": "./dist/ui.js",
@@ -70,11 +75,12 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp ../ui/dist/style.css dist/style.css && cp ../xlsx/dist/style.css dist/xlsx-style.css",
+    "build": "tsc -p tsconfig.json && node -e \"const fs=require('node:fs');fs.copyFileSync('../ui/dist/style.css','dist/style.css');fs.copyFileSync('../xlsx/dist/style.css','dist/xlsx-style.css')\"",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@paperfill/docx": "0.2.0",
+    "@paperfill/html": "0.2.0",
     "@paperfill/kernel": "0.2.0",
     "@paperfill/pdf": "0.2.0",
     "@paperfill/react": "0.2.0",

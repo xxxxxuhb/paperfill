@@ -1,5 +1,6 @@
 import type {
   DiscoveredField,
+  ExportFormat,
   KernelPlugin,
   Source,
   TemplateDefinition,
@@ -45,7 +46,7 @@ export function applyBeforeExport(
 
 export function applyAfterExport(
   plugins: KernelPlugin[],
-  result: { buffer: Uint8Array; format: 'docx' | 'xlsx' },
+  result: { buffer: Uint8Array; format: ExportFormat },
   ctx: { definition: TemplateDefinition; source: Source },
 ): Uint8Array {
   let buffer = result.buffer

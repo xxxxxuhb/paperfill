@@ -27,6 +27,7 @@ paperfill/
     kernel         # 状态机：Command / State / Schema / View / Preview 缓存
     docx           # Word adapter：扫 {{marker}}、bind、export、getPreview、mountDocxPreview
     xlsx           # Excel adapter：单元格标记、合并预览、bind、export、mountXlsxPreview
+    html           # HTML adapter：字符串/UTF-8 文件、bind、export、mountHtmlPreview
     ui             # 可选：框架无关原生 createField / mountField / nativeFieldMounter
     vue / react    # 可选：useContractKit 订阅快照（peer 框架）
     pdf            # 可选（浏览器）：已填写 docx/xlsx → PDF
@@ -41,9 +42,11 @@ paperfill/
 | `kernel` | 状态、命令、校验、schema/view、缓存 preview | DOM、框架、解析 OOXML |
 | `docx` | load / discoverFields / getPreview(blocks) / bind / export / **`mountDocxPreview` 文档布局** | 存业务 data、字段控件 |
 | `xlsx` | load / discoverFields / getPreview(含单元格样式) / bind / export / **`mountXlsxPreview` 表格布局** | 存业务 data、字段控件 |
+| `html` | HTML 字符串或 UTF-8 文件的 discover / bind / export / **`mountHtmlPreview`** | 执行业务脚本、解释 custom 数据 |
 | `ui` | 原生控件（含 select / multiselect / display / image 选文件）+ `nativeFieldMounter` | 绑死某一框架、文档排版 |
 | `vue` / `react` | `useContractKit` 订阅 schema/data/validation | 自绘字段、改 OOXML |
 | `pdf` | 浏览器里把**已导出文件**渲成 PDF | 服务端 Office 矢量转换、改 kernel 状态 |
+| `custom` | 由接入方实现 `DocumentAdapter`，kernel 仍提供状态、命令、校验和插件 | 内置布局或导出格式 |
 | 页面 | 上传、OSS、权限、注入 FieldMounter | 直接改 zip/OOXML；自绘 Excel 表格 |
 
 ---
