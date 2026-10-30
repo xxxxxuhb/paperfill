@@ -2,7 +2,7 @@
 
 本仓库按 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 记录公开 API 变化。版本遵循 semver；`0.x` 仍可能有破坏性调整。
 
-## Unreleased
+## 0.3.0 — 2026-10-30
 
 ### Added
 

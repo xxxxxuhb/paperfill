@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/docx",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Word (.docx) adapter and preview layout for paperfill",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.2.0",
+    "@paperfill/kernel": "0.3.0",
     "docx-preview": "^0.4.0",
     "jszip": "^3.10.1"
   },

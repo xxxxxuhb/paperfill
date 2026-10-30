@@ -1,6 +1,6 @@
 {
   "name": "@paperfill/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Framework-free field controls for paperfill (native input/select/textarea/date)",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@paperfill/kernel": "0.2.0"
+    "@paperfill/kernel": "0.3.0"
   },
   "devDependencies": {
     "typescript": "^5.8.2"
